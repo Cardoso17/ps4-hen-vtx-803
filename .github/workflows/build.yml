@@ -1,0 +1,25 @@
+name: PS4 HEN Payload
+
+on: [ push, pull_request ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: clone
+      uses: actions/checkout@main
+
+    - name: Set execute permission for build.sh
+      run: chmod +x build.sh
+
+    - name: Build
+      run: ./build.sh
+
+    - name: release
+      if: github.event_name == 'push'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh release create 1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-1100-vtx.bin --target ${{ GITHUB.SHA }} -t 1.0${{ GITHUB.RUN_NUMBER }}
