@@ -174,10 +174,10 @@ PAYLOAD_CODE int shellcore_fpkg_patch(void)
 		nidf_libSceDipsw_patch4,
 	};
 
-	uint32_t ext_hdd_patch_offsets[] = {
-		ext_hdd_patch1,
-		ext_hdd_patch2,
-	};
+	//uint32_t ext_hdd_patch_offsets[] = {
+	//	ext_hdd_patch1,
+	//	ext_hdd_patch2,
+	//};
 
 	uint8_t xor__eax_eax__inc__eax[5] = { 0x31, 0xC0, 0xFF, 0xC0, 0x90 };
 
@@ -232,11 +232,12 @@ PAYLOAD_CODE int shellcore_fpkg_patch(void)
 		goto error;
 
 	// enable support with 9.xx external hdd
-	for (int i = 0; i < COUNT_OF(ext_hdd_patch_offsets); i++) {
-		ret = proc_write_mem(ssc, (void *)(text_seg_base + ext_hdd_patch_offsets[i]), 1, "\xEB", &n);
+	//for (int i = 0; i < COUNT_OF(ext_hdd_patch_offsets); i++) {
+		//ret = proc_write_mem(ssc, (void *)(text_seg_base + ext_hdd_patch_offsets[i]), 1, "\xEB", &n);
+                ret = proc_write_mem(ssc, (void *)(text_seg_base + ext_hdd_patch), 1, "\xEB", &n);
 		if (ret)
 			goto error;
-	}
+	//}
 
 	//TODO: Find 9.00 Offsets
 	// enable debug trophies on retail
@@ -356,7 +357,7 @@ PAYLOAD_CODE int remoteplay_patch() {
 
     struct proc_vm_map_entry *entries = NULL;
     size_t num_entries;
-    size_t n;
+    //size_t n;
 
     int ret = 0;
 
@@ -385,15 +386,15 @@ PAYLOAD_CODE int remoteplay_patch() {
     }
 
     // patch SceRemotePlay process
-    ret = proc_write_mem(srp, (void *)(executable_base + SceRemotePlay_patch1), 1, "\x01", &n);
-    if (ret) {
-        goto error;
-    }
+    //ret = proc_write_mem(srp, (void *)(executable_base + SceRemotePlay_patch1), 1, "\x01", &n);
+    //if (ret) {
+    //    goto error;
+    //}
 
-    ret = proc_write_mem(srp, (void *)(executable_base + SceRemotePlay_patch2), 2, "\xEB\x1E", &n);
-    if (ret) {
-        goto error;
-    }
+    //ret = proc_write_mem(srp, (void *)(executable_base + SceRemotePlay_patch2), 2, "\xEB\x1E", &n);
+    //if (ret) {
+    //    goto error;
+    //}
 
     error:
     if (entries) {
@@ -432,7 +433,7 @@ PAYLOAD_CODE void restore_retail_dipsw()
 
 PAYLOAD_CODE void apply_patches() {
 	shellui_patch();
-	//remoteplay_patch();
+	remoteplay_patch();
 }
 
 PAYLOAD_CODE void install_patches()
