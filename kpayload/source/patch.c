@@ -432,7 +432,7 @@ PAYLOAD_CODE void restore_retail_dipsw()
 
 PAYLOAD_CODE void apply_patches() {
 	shellui_patch();
-	remoteplay_patch();
+	//remoteplay_patch();
 }
 
 PAYLOAD_CODE void install_patches()
