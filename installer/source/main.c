@@ -8,7 +8,7 @@
 #define PS4_UPDATE_TEMP_PATH "/update/PS4UPDATE.PUP.net.temp"
 
 extern char kpayload[];
-unsigned kpayload_size;
+extern unsigned kpayload_size;
 
 int install_payload(struct thread *td, struct install_payload_args* args)
 {
