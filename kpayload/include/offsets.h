@@ -17,7 +17,7 @@
 #define DIPSW_addr                       0x0221C5D0
 
 // common
-#define memcmp_addr                      0x000948B0
+#define memcmp_addr                      0x00094884
 #define _sx_xlock_addr                   0x000E3200
 #define _sx_xunlock_addr                 0x000E33C0
 #define malloc_addr                      0x001A4220
@@ -37,7 +37,7 @@
 #define sceSblAuthMgrSmIsLoadable2_addr  0x00642F90
 #define _sceSblAuthMgrGetSelfInfo_addr   0x006437D0
 #define _sceSblAuthMgrSmStart_addr       0x0063E9C0
-#define sceSblAuthMgrVerifyHeader_addr   0x00640740
+#define sceSblAuthMgrVerifyHeader_addr   0x00642FF0
 
 // Fpkg
 #define RsaesPkcs1v15Dec2048CRT_addr     0x003C8060
