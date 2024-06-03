@@ -148,6 +148,7 @@ PAYLOAD_CODE void resolve_kdlsym()
 PAYLOAD_CODE int my_entrypoint()
 {
 	resolve_kdlsym();
+	printf("hello from kernel\n");
 	install_fself_hooks();
 	install_fpkg_hooks();
 	install_patches();
