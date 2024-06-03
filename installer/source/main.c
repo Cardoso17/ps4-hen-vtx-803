@@ -128,7 +128,6 @@ int _main(struct thread *td)
 
 	errno = 0;
 
-	sleep(10);
 	result = kexec(&install_payload, &payload_info);
 	result = !result ? 0 : errno;
 	printfsocket("install_payload: %d\n", result);
