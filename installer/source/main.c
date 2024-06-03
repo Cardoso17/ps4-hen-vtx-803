@@ -34,35 +34,16 @@ int install_payload(struct thread *td, struct install_payload_args* args)
 	if (!payload_data || payload_size < sizeof(payload_header) || payload_header->signature != 0x5041594C4F414458ull)
 		return -1;
 
-	cred->cr_uid = 0;
-	cred->cr_ruid = 0;
-	cred->cr_rgid = 0;
-	cred->cr_groups[0] = 0;
-
-	cred->cr_prison = *got_prison0;
-	fd->fd_rdir = fd->fd_jdir = *got_rootvnode;
+        int (*kprintf)(const char *fmt, ...) = ((void*)kernel_base+0x002FCBD0);
 
 	// Use "kmem" for all patches
-    uint8_t *kmem;
-
-	// escalate ucred privs, needed for access to the filesystem ie* mounting & decrypting files
-	void *td_ucred = *(void **)(((char *)td) + 304); // p_ucred == td_ucred
-
-	// sceSblACMgrIsSystemUcred
-	uint64_t *sonyCred = (uint64_t *)(((char *)td_ucred) + 96);
-	*sonyCred = 0xffffffffffffffff;
-
-	// sceSblACMgrGetDeviceAccessType
-	uint64_t *sceProcType = (uint64_t *)(((char *)td_ucred) + 88);
-	*sceProcType = 0x3801000000000013; // Max access
-
-	// sceSblACMgrHasSceProcessCapability
-	uint64_t *sceProcCap = (uint64_t *)(((char *)td_ucred) + 104);
-	*sceProcCap = 0xffffffffffffffff; // Sce Process
+        uint8_t *kmem;
 
 	// Disable write protection
 	uint64_t cr0 = readCr0();
 	writeCr0(cr0 & ~X86_CR0_WP);
+
+	kprintf("Patching settings errors\n");
 
 	// Patch debug setting errors
 	kmem = (uint8_t *)&kernel_base[debug_menu_error_patch1];
@@ -77,11 +58,15 @@ int install_payload(struct thread *td, struct install_payload_args* args)
 	kmem[2] = 0x00;
 	kmem[3] = 0x00;
 
+	kprintf("Patching disable pfs signature check\n");
+
 	// flatz disable pfs signature check
 	kmem = (uint8_t *)&kernel_base[disable_signature_check_patch];
 	kmem[0] = 0x31;
 	kmem[1] = 0xC0;
 	kmem[2] = 0xC3;
+
+	kprintf("Patching enable debug RIFs\n");
 
 	// flatz enable debug RIFs
 	kmem = (uint8_t *)&kernel_base[enable_debug_rifs_patch1];
@@ -94,9 +79,12 @@ int install_payload(struct thread *td, struct install_payload_args* args)
 	kmem[1] = 0x01;
 	kmem[2] = 0xC3;
 
+	kprintf("spoof sdk_version\n");
+
 	// spoof sdk_version - enable vr
 	*(uint32_t *)(kernel_base + sdk_version_patch) = FAKE_FW_VERSION;
 
+	kprintf("Installing kpayload\n");
 	// install kpayload
 	memset(payload_buffer, 0, PAGE_SIZE);
 	memcpy(payload_buffer, payload_data, payload_size);
@@ -109,6 +97,8 @@ int install_payload(struct thread *td, struct install_payload_args* args)
 
 	// Restore write protection
 	writeCr0(cr0);
+
+	kprintf("calling kelf entry\n");
 
 	int (*payload_entrypoint)();
 	*((void**)&payload_entrypoint) = (void*)(&payload_buffer[payload_header->entrypoint_offset]);
