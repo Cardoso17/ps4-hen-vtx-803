@@ -12,16 +12,9 @@ extern unsigned kpayload_size;
 
 int install_payload(struct thread *td, struct install_payload_args* args)
 {
-	struct ucred* cred;
-	struct filedesc* fd;
-
-	fd = td->td_proc->p_fd;
-	cred = td->td_proc->p_ucred;
 
 	uint8_t* kernel_base = (uint8_t*)(__readmsr(0xC0000082) - XFAST_SYSCALL_addr);
 	uint8_t* kernel_ptr = (uint8_t*)kernel_base;
-	void** got_prison0 = (void**)&kernel_ptr[PRISON0_addr];
-	void** got_rootvnode = (void**)&kernel_ptr[ROOTVNODE_addr];
 
 	void (*pmap_protect)(void * pmap, uint64_t sva, uint64_t eva, uint8_t pr) = (void *)(kernel_base + pmap_protect_addr);
 	void *kernel_pmap_store = (void *)(kernel_base + PMAP_STORE_addr);
@@ -135,6 +128,7 @@ int _main(struct thread *td)
 
 	errno = 0;
 
+	sleep(10);
 	result = kexec(&install_payload, &payload_info);
 	result = !result ? 0 : errno;
 	printfsocket("install_payload: %d\n", result);
