@@ -16,6 +16,7 @@ jobs:
       run: chmod +x build.sh
 
     - name: Build
+      run: ./clean.sh
       run: ./build.sh
 
     - name: release
