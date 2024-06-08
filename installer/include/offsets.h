@@ -9,11 +9,14 @@
 #define PRISON0_addr                    0X0111B840
 #define ROOTVNODE_addr                  0X021EBF20
 #define PMAP_STORE_addr                 0X01B8C4B0
-#define DT_HASH_SEGMENT_addr            0x0
+#define DT_HASH_SEGMENT_addr            0x00CE6BE8
+#define M_TEMP_addr                     0x0155E1E0
 
 // Functions
 #define pmap_protect_addr               0X0012FA40
 #define pmap_protect_p_addr             0X0012FA87
+#define malloc_addr                     0x003017B0
+#define printf_addr                     0x000B79E0
 
 // Patches
 // debug menu error
@@ -32,12 +35,12 @@
 #define enable_debug_rifs_patch2        0X0064E420
 
 // sdk version spoof - enable all VR fws
-#define sdk_version_patch               0x0
+#define sdk_version_patch               0x01269DF0
 
 // enable debug log
 #define enable_debug_log_patch          0X000B7AC7
 
 // enable uart output
-#define enable_uart_patch               0x0
+#define enable_uart_patch               0x01527F60
 
 #endif
