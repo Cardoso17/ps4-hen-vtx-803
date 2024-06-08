@@ -18,4 +18,11 @@ do {																					\
 #define printfsocket(format, ...) (void)0
 #endif
 
+void notify(char *message)
+{
+	char buffer[512];
+	sprintf(buffer, "%s", message);
+	sceSysUtilSendSystemNotificationWithText(222, buffer);
+}
+
 #endif
