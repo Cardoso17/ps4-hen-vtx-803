@@ -22,11 +22,11 @@ jobs:
         ./clean.sh
         ./build.sh
 
-    - name: release for branch 900
-      if: github.event_name == 'push' && github.ref == 'refs/heads/900'
+    - name: release for branch 903
+      if: github.event_name == 'push' && github.ref == 'refs/heads/903'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create 900-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-900-vtx.bin --target ${{ GITHUB.SHA }} -t 900-1.0${{ GITHUB.RUN_NUMBER }}
+      run: gh release create 903-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-903-vtx.bin --target ${{ GITHUB.SHA }} -t 903-1.0${{ GITHUB.RUN_NUMBER }}
 
     - name: release for branch 1050
       if: github.event_name == 'push' && github.ref == 'refs/heads/1050'
