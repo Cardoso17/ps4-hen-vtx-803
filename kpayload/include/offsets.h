@@ -130,6 +130,6 @@
 #define debug_trophies_patch            0x00745809
 
 // disable screenshot block
-// #define disable_screenshot_patch        0x0
+// #define disable_screenshot_patch        0x000d1956
 
 #endif
