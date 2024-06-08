@@ -8,4 +8,4 @@ pushd installer
 make clean
 popd
 
-rm -f ps4-hen-1100-vtx.bin payload.js
+rm -f ps4-hen-903-vtx.bin payload.js
