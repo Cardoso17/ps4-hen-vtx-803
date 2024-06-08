@@ -20,6 +20,7 @@ extern void (*free)(void* addr, void* type) PAYLOAD_BSS;
 extern void* (*memcpy)(void* dst, const void* src, size_t len) PAYLOAD_BSS;
 extern void* (*memset)(void *s, int c, size_t n) PAYLOAD_BSS;
 extern int (*memcmp)(const void *ptr1, const void *ptr2, size_t num) PAYLOAD_BSS;
+extern int (*printf)(const char *fmt, ...) PAYLOAD_BSS;
 extern void (*eventhandler_register)(void *list, const char *name, void *func, void *key, void *arg, int priority) PAYLOAD_BSS; // 5.5x-6.72
 
 extern void* M_TEMP PAYLOAD_BSS;
@@ -357,7 +358,7 @@ PAYLOAD_CODE int remoteplay_patch() {
 
     struct proc_vm_map_entry *entries = NULL;
     size_t num_entries;
-    //size_t n;
+    size_t n;
 
     int ret = 0;
 
@@ -433,7 +434,7 @@ PAYLOAD_CODE void restore_retail_dipsw()
 
 PAYLOAD_CODE void apply_patches() {
 	shellui_patch();
-	remoteplay_patch();
+	//remoteplay_patch();
 }
 
 PAYLOAD_CODE void install_patches()

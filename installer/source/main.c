@@ -1,7 +1,7 @@
 #include <ps4.h>
 
 #include "defines.h"
-#include "debug.h"
+#include "ddebug.h"
 #include "offsets.h"
 
 #define PS4_UPDATE_FULL_PATH "/update/PS4UPDATE.PUP"
@@ -10,33 +10,59 @@
 extern char kpayload[];
 extern unsigned kpayload_size;
 
-int install_payload(struct thread *td, struct install_payload_args* args)
+int install_payload(struct thread *td, struct payload_info* payload_info)
 {
+	struct ucred* cred;
+	struct filedesc* fd;
+
+	fd = td->td_proc->p_fd;
+	cred = td->td_proc->p_ucred;
 
 	uint8_t* kernel_base = (uint8_t*)(__readmsr(0xC0000082) - XFAST_SYSCALL_addr);
 	uint8_t* kernel_ptr = (uint8_t*)kernel_base;
+	void** got_prison0 = (void**)&kernel_ptr[PRISON0_addr];
+	void** got_rootvnode = (void**)&kernel_ptr[ROOTVNODE_addr];
 
 	void (*pmap_protect)(void * pmap, uint64_t sva, uint64_t eva, uint8_t pr) = (void *)(kernel_base + pmap_protect_addr);
 	void *kernel_pmap_store = (void *)(kernel_base + PMAP_STORE_addr);
 
-	uint8_t* payload_data = args->payload_info->buffer;
-	size_t payload_size = args->payload_info->size;
+	uint8_t* payload_data = payload_info->buffer;
+	size_t payload_size = payload_info->size;
 	struct payload_header* payload_header = (struct payload_header*)payload_data;
 	uint8_t* payload_buffer = (uint8_t*)&kernel_base[DT_HASH_SEGMENT_addr];
 
 	if (!payload_data || payload_size < sizeof(payload_header) || payload_header->signature != 0x5041594C4F414458ull)
 		return -1;
 
-        int (*kprintf)(const char *fmt, ...) = ((void*)kernel_base+0x002FCBD0);
+	cred->cr_uid = 0;
+	cred->cr_ruid = 0;
+	cred->cr_rgid = 0;
+	cred->cr_groups[0] = 0;
+
+	cred->cr_prison = *got_prison0;
+	fd->fd_rdir = fd->fd_jdir = *got_rootvnode;
 
 	// Use "kmem" for all patches
-        uint8_t *kmem;
+    uint8_t *kmem;
+
+	// escalate ucred privs, needed for access to the filesystem ie* mounting & decrypting files
+	void *td_ucred = *(void **)(((char *)td) + 304); // p_ucred == td_ucred
+
+	// sceSblACMgrIsSystemUcred
+	uint64_t *sonyCred = (uint64_t *)(((char *)td_ucred) + 96);
+	*sonyCred = 0xffffffffffffffff;
+
+	// sceSblACMgrGetDeviceAccessType
+	uint64_t *sceProcType = (uint64_t *)(((char *)td_ucred) + 88);
+	*sceProcType = 0x3801000000000013; // Max access
+
+	// sceSblACMgrHasSceProcessCapability
+	uint64_t *sceProcCap = (uint64_t *)(((char *)td_ucred) + 104);
+	*sceProcCap = 0xffffffffffffffff; // Sce Process
 
 	// Disable write protection
 	uint64_t cr0 = readCr0();
 	writeCr0(cr0 & ~X86_CR0_WP);
-
-	kprintf("Patching settings errors\n");
 
 	// Patch debug setting errors
 	kmem = (uint8_t *)&kernel_base[debug_menu_error_patch1];
@@ -51,15 +77,11 @@ int install_payload(struct thread *td, struct install_payload_args* args)
 	kmem[2] = 0x00;
 	kmem[3] = 0x00;
 
-	kprintf("Patching disable pfs signature check\n");
-
 	// flatz disable pfs signature check
 	kmem = (uint8_t *)&kernel_base[disable_signature_check_patch];
 	kmem[0] = 0x31;
 	kmem[1] = 0xC0;
 	kmem[2] = 0xC3;
-
-	kprintf("Patching enable debug RIFs\n");
 
 	// flatz enable debug RIFs
 	kmem = (uint8_t *)&kernel_base[enable_debug_rifs_patch1];
@@ -72,12 +94,9 @@ int install_payload(struct thread *td, struct install_payload_args* args)
 	kmem[1] = 0x01;
 	kmem[2] = 0xC3;
 
-	kprintf("spoof sdk_version\n");
-
 	// spoof sdk_version - enable vr
 	*(uint32_t *)(kernel_base + sdk_version_patch) = FAKE_FW_VERSION;
 
-	kprintf("Installing kpayload\n");
 	// install kpayload
 	memset(payload_buffer, 0, PAGE_SIZE);
 	memcpy(payload_buffer, payload_data, payload_size);
@@ -90,8 +109,6 @@ int install_payload(struct thread *td, struct install_payload_args* args)
 
 	// Restore write protection
 	writeCr0(cr0);
-
-	kprintf("calling kelf entry\n");
 
 	int (*payload_entrypoint)();
 	*((void**)&payload_entrypoint) = (void*)(&payload_buffer[payload_header->entrypoint_offset]);

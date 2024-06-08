@@ -13,11 +13,11 @@
 #define SBL_KEYMGR_KEY_RBTREE_addr       0x026606F8
 #define SBL_KEYMGR_BUF_VA_addr           0x02664000
 #define SBL_KEYMGR_BUF_GVA_addr          0x02664808
-#define FPU_CTX_addr                     0x02653280
+#define FPU_CTX_addr                     0x02660180
 #define DIPSW_addr                       0x0221C5D0
 
 // common
-#define memcmp_addr                      0x00094884
+#define memcmp_addr                      0x000948B0
 #define _sx_xlock_addr                   0x000E3200
 #define _sx_xunlock_addr                 0x000E33C0
 #define malloc_addr                      0x001A4220
@@ -59,7 +59,7 @@
 #define vm_map_lookup_entry_addr         0x00357EF0
 #define proc_rwmem_addr                  0x003838A0
 
-#define printf_hook                      0x0127E4E0
+#define printf_hook                      0x01A7EEB8
 
 // Fself hooks
 #define sceSblAuthMgrIsLoadable__sceSblACMgrGetPathId_hook          0x0063D13C

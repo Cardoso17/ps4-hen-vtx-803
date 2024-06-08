@@ -20,25 +20,24 @@
 #define debug_menu_error_patch1         0x004EE328
 #define debug_menu_error_patch2         0x004EF3EE
 
-// disable signature check
-#define disable_signature_check_patch   0x00684EAD // 0x00684EB0 ???
-
-// enable debug RIFs
-#define enable_debug_rifs_patch1        0x0064BFD0
-#define enable_debug_rifs_patch2        0x0064C030 // 0x0064C000 ???
-
 // allow sys_dynlib_dlsym in all processes
 #define sys_dynlib_dlsym_patch1         0x0064BFD0
 #define sys_dynlib_dlsym_patch2         0x0064C000
+
+// disable signature check
+#define disable_signature_check_patch   0x00684EB0 // 0x00684EAD // ???
+
+// enable debug RIFs
+#define enable_debug_rifs_patch1        0x0064BFD0
+#define enable_debug_rifs_patch2        0x0064C000 // 0x0064C030 // ???
 
 // sdk version spoof - enable all VR fws
 #define sdk_version_patch               0x015241A0
 
 // enable debug log
-#define enable_debug_log_patch          0x002FCCC3 // 0x002FCCB7 ??
+#define enable_debug_log_patch          0x002FCCB7
 
 // enable uart output
-#define enable_uart_patch               0x0152CFF8
+#define enable_uart_patch               0x00D2CFF5
 
 #endif
-
