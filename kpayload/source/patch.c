@@ -242,11 +242,11 @@ PAYLOAD_CODE int shellcore_fpkg_patch(void)
 
 	//TODO: Find 9.00 Offsets
 	// enable debug trophies on retail
-	//ret = proc_write_mem(ssc, (void *)(text_seg_base + debug_trophies_patch), 5, "\x31\xc0\x90\x90\x90", &n);
-	//if (ret)
-	//{
-	//	goto error;
-	//}
+	ret = proc_write_mem(ssc, (void *)(text_seg_base + debug_trophies_patch), 5, "\x31\xc0\x90\x90\x90", &n);
+	if (ret)
+	{
+		goto error;
+	}
 
     //TODO: Find 9.00 Offsets
 	// never disable screenshot - credits to Biorn1950
@@ -306,10 +306,10 @@ PAYLOAD_CODE int shellui_patch(void)
     }
 
     // disable CreateUserForIDU
-    ret = proc_write_mem(ssui, (void *)(executable_base  + CreateUserForIDU_patch), 4, "\x48\x31\xC0\xC3", &n);
-    if (ret) {
-        goto error;
-    }
+    //ret = proc_write_mem(ssui, (void *)(executable_base  + CreateUserForIDU_patch), 4, "\x48\x31\xC0\xC3", &n);
+    //if (ret) {
+    //    goto error;
+    //}
 
     for (int i = 0; i < num_entries; i++) {
         if (!memcmp(entries[i].name, "app.exe.sprx", 12) && (entries[i].prot >= (PROT_READ | PROT_EXEC))) {
@@ -324,7 +324,7 @@ PAYLOAD_CODE int shellui_patch(void)
     }
 
     // enable remote play menu - credits to Aida 6.72
-	ret = proc_write_mem(ssui, (void *)(app_base  + remote_play_menu_patch), 5, "\xE9\xBA\x02\x00\x00", &n); // 6.72
+	//ret = proc_write_mem(ssui, (void *)(app_base  + remote_play_menu_patch), 5, "\xE9\xBA\x02\x00\x00", &n); // 6.72
 
     for (int i = 0; i < num_entries; i++) {
         if (!memcmp(entries[i].name, "libkernel_sys.sprx", 18) && (entries[i].prot >= (PROT_READ | PROT_EXEC))) {
