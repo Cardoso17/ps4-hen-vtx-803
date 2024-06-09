@@ -440,6 +440,6 @@ PAYLOAD_CODE void apply_patches() {
 PAYLOAD_CODE void install_patches()
 {
 	apply_patches();
-	eventhandler_register(NULL, "system_suspend_phase3", &restore_retail_dipsw, "hen_suspend_patches", NULL, EVENTHANDLER_PRI_PRE_FIRST); // 5.5x-6.72
-	eventhandler_register(NULL, "system_resume_phase4", &apply_patches, "hen_resume_patches", NULL, EVENTHANDLER_PRI_LAST); // 5.5x-6.72
+	eventhandler_register(NULL, "system_suspend_phase3", &restore_retail_dipsw, "hen_suspend_patches", NULL, EVENTHANDLER_PRI_PRE_FIRST);
+	eventhandler_register(NULL, "system_resume_phase4", &apply_patches, "hen_resume_patches", NULL, EVENTHANDLER_PRI_LAST);
 }
