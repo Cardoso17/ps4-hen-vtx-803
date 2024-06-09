@@ -9,33 +9,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: clone
+    - name: Clone repository
       uses: actions/checkout@main
 
-    - name: Set execute permission for build.sh
+    - name: Set execute permission for scripts
       run: |
         chmod +x clean.sh
         chmod +x build.sh
 
-    - name: Build
+    - name: Build project
       run: |
         ./clean.sh
         ./build.sh
 
-    - name: release for branch 900
-      if: github.event_name == 'push' && github.ref == 'refs/heads/900'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create 900-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-900-vtx.bin --target ${{ GITHUB.SHA }} -t 900-1.0${{ GITHUB.RUN_NUMBER }}
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ps4-hen-${{ github.ref_name }}
+        path: ./*.bin
 
-    - name: release for branch 1050
-      if: github.event_name == 'push' && github.ref == 'refs/heads/1050'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create 1050-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-1050-vtx.bin --target ${{ GITHUB.SHA }} -t 1050-1.0${{ GITHUB.RUN_NUMBER }}
+  combine-and-release:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Download all build artifacts
+      uses: actions/download-artifact@v2
+      with:
+        path: ./builds
 
-    - name: release for branch 1100
-      if: github.event_name == 'push' && github.ref == 'refs/heads/1100'
+    - name: Create combined zip file
+      run: |
+        mkdir -p combined
+        cp ./builds/*/*.bin ./combined/
+        cd combined
+        zip -r ../ps4-hen-all-branches.zip ./*
+
+    - name: Release combined zip file
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/803' || github.ref == 'refs/heads/903' || github.ref == 'refs/heads/1050' || github.ref == 'refs/heads/1100')
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create 1100-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-1100-vtx.bin --target ${{ GITHUB.SHA }} -t 1100-1.0${{ GITHUB.RUN_NUMBER }}
+      run: gh release create combined-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-all-branches.zip --target ${{ GITHUB.SHA }} -t combined-1.0${{ GITHUB.RUN_NUMBER }}
