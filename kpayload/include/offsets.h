@@ -1,134 +1,135 @@
 #ifndef __OFFSETS_H__
 #define __OFFSETS_H__
 #pragma once
-// 11.00
 
-#define XFAST_SYSCALL_addr               0x000001C0
-#define M_TEMP_addr                      0x015415B0
-#define MINI_SYSCORE_SELF_BINARY_addr    0x0155CC48
-#define ALLPROC_addr                     0x022D0A98
-#define SBL_DRIVER_MAPPED_PAGES_addr     0x02646688
-#define SBL_PFS_SX_addr                  0x0264C080
-#define SBL_KEYMGR_KEY_SLOTS_addr        0x026606E8
-#define SBL_KEYMGR_KEY_RBTREE_addr       0x026606F8
-#define SBL_KEYMGR_BUF_VA_addr           0x02664000
-#define SBL_KEYMGR_BUF_GVA_addr          0x02664808
-#define FPU_CTX_addr                     0x02660180
-#define DIPSW_addr                       0x0221C5D0
+// 8.03
+// data
+#define	XFAST_SYSCALL_addr              0x000001C0
+#define M_TEMP_addr                     0x01A77E10
+#define MINI_SYSCORE_SELF_BINARY_addr   0x01577F28
+#define ALLPROC_addr                    0x01B244E0
+#define SBL_DRIVER_MAPPED_PAGES_addr    0x0263FAE8
+#define SBL_PFS_SX_addr                 0x02644008
+#define SBL_KEYMGR_KEY_SLOTS_addr       0x02648848
+#define SBL_KEYMGR_KEY_RBTREE_addr      0x02648858
+#define SBL_KEYMGR_BUF_VA_addr          0x0264C000
+#define SBL_KEYMGR_BUF_GVA_addr         0x0264C808
+#define FPU_CTX_addr                    0x0266C500
+#define DIPSW_addr                      0x01B51550
 
 // common
-#define memcmp_addr                      0x000948B0
-#define _sx_xlock_addr                   0x000E3200
-#define _sx_xunlock_addr                 0x000E33C0
-#define malloc_addr                      0x001A4220
-#define free_addr                        0x001A43E0
-#define strstr_addr                      0x002C5740
-#define fpu_kern_enter_addr              0x000C0660
-#define fpu_kern_leave_addr              0x000C0720
-#define memcpy_addr                      0x002DDDF0
-#define memset_addr                      0x000482D0
-#define strlen_addr                      0x0021DC40
-#define printf_addr                      0x002FCBD0
-#define eventhandler_register_addr       0x0043E440
+#define memcmp_addr                     0x00195A90
+#define _sx_xlock_addr                  0x0043A340
+#define _sx_xunlock_addr                0x0043A500
+#define malloc_addr                     0x0046F7F0
+#define free_addr                       0x0046F9B0
+#define strstr_addr                     0x00439C10
+#define fpu_kern_enter_addr             0x001714B0
+#define fpu_kern_leave_addr             0x00171570
+#define memcpy_addr                     0x0025E1C0
+#define memset_addr                     0x000F6C60
+#define strlen_addr                     0x002F6090
+#define printf_addr                     0x00430AE0
+#define eventhandler_register_addr      0x0026E270
 
 // Fself
-#define sceSblACMgrGetPathId_addr        0x003D0E90
-#define sceSblServiceMailbox_addr        0x0062F810
-#define sceSblAuthMgrSmIsLoadable2_addr  0x00642F90
-#define _sceSblAuthMgrGetSelfInfo_addr   0x006437D0
-#define _sceSblAuthMgrSmStart_addr       0x0063E9C0
-#define sceSblAuthMgrVerifyHeader_addr   0x00642FF0
+#define sceSblACMgrGetPathId_addr       0x001D57C0
+#define sceSblServiceMailbox_addr       0x0062F6E0
+#define sceSblAuthMgrSmIsLoadable2_addr 0x00641F40
+#define _sceSblAuthMgrGetSelfInfo_addr  0x00642780
+#define _sceSblAuthMgrSmStart_addr      0x0063D140
+#define sceSblAuthMgrVerifyHeader_addr  0x00641FA0
 
 // Fpkg
-#define RsaesPkcs1v15Dec2048CRT_addr     0x003C8060
-#define Sha256Hmac_addr                  0x002D1CA0
-#define AesCbcCfb128Encrypt_addr         0x002DEAA0
-#define AesCbcCfb128Decrypt_addr         0x002DECD0
-#define sceSblDriverSendMsg_0_addr       0x0061AF60
-#define sceSblPfsSetKeys_addr            0x0061D900
-#define sceSblKeymgrSetKeyStorage_addr   0x0062EDC0
-#define sceSblKeymgrSetKeyForPfs_addr    0x00625DF0
-#define sceSblKeymgrCleartKey_addr       0x00626130
-#define sceSblKeymgrSmCallfunc_addr      0x006259C0
+#define RsaesPkcs1v15Dec2048CRT_addr    0x0018DE10
+#define Sha256Hmac_addr                 0x00126B90
+#define AesCbcCfb128Encrypt_addr        0x001665B0
+#define AesCbcCfb128Decrypt_addr        0x001667E0
+#define sceSblDriverSendMsg_0_addr      0x00619BE0
+#define sceSblPfsSetKeys_addr           0x0061CBA0
+#define sceSblKeymgrSetKeyStorage_addr  0x00627FB0
+#define sceSblKeymgrSetKeyForPfs_addr   0x0061E250
+#define sceSblKeymgrCleartKey_addr      0x0061E590
+#define sceSblKeymgrSmCallfunc_addr     0x0061DE20
 
 // Patch
-#define vmspace_acquire_ref_addr         0x00357720
-#define vmspace_free_addr                0x00357550
-#define vm_map_lock_read_addr            0x003578B0
-#define vm_map_unlock_read_addr          0x00357900
-#define vm_map_lookup_entry_addr         0x00357EF0
-#define proc_rwmem_addr                  0x003838A0
+#define vmspace_acquire_ref_addr        0x003E74E0
+#define vmspace_free_addr               0x003E7310
+#define vm_map_lock_read_addr           0x003E7680
+#define vm_map_unlock_read_addr         0x003E76D0
+#define vm_map_lookup_entry_addr        0x003E7CC0
+#define proc_rwmem_addr                 0x00173770
 
-#define printf_hook                      0x01A7EEB8
+#define printf_hook 0x001A7AE58
 
 // Fself hooks
-#define sceSblAuthMgrIsLoadable__sceSblACMgrGetPathId_hook          0x0063D13C
-#define sceSblAuthMgrIsLoadable2_hook                               0x0063D28E
-#define sceSblAuthMgrVerifyHeader_hook1                             0x0063DA26
-#define sceSblAuthMgrVerifyHeader_hook2                             0x0063E709
-#define sceSblAuthMgrSmLoadSelfSegment__sceSblServiceMailbox_hook   0x00640E0D
-#define sceSblAuthMgrSmLoadSelfBlock__sceSblServiceMailbox_hook     0x00641A48
+#define sceSblAuthMgrIsLoadable__sceSblACMgrGetPathId_hook          0x0063B8BC
+#define sceSblAuthMgrIsLoadable2_hook                               0x0063BA0E
+#define sceSblAuthMgrVerifyHeader_hook1                             0x0063C1A6
+#define sceSblAuthMgrVerifyHeader_hook2                             0x0063CE89
+#define sceSblAuthMgrSmLoadSelfSegment__sceSblServiceMailbox_hook   0x0063F59D
+#define sceSblAuthMgrSmLoadSelfBlock__sceSblServiceMailbox_hook     0x006401D8
 
 // Fpkg hooks
-#define sceSblKeymgrSetKeyStorage__sceSblDriverSendMsg_hook         0x0062EE65
-#define sceSblKeymgrInvalidateKey__sx_xlock_hook                    0x00626FAD
-#define sceSblKeymgrSmCallfunc_npdrm_decrypt_isolated_rif_hook      0x0064D230
-#define sceSblKeymgrSmCallfunc_npdrm_decrypt_rif_new_hook           0x0064DFFE
-#define mountpfs__sceSblPfsSetKeys_hook1                            0x006993B9
-#define mountpfs__sceSblPfsSetKeys_hook2                            0x006995EA
+#define sceSblKeymgrSetKeyStorage__sceSblDriverSendMsg_hook         0x00628055
+#define sceSblKeymgrInvalidateKey__sx_xlock_hook                    0x0061F40D
+#define sceSblKeymgrSmCallfunc_npdrm_decrypt_isolated_rif_hook      0x0064C590
+#define sceSblKeymgrSmCallfunc_npdrm_decrypt_rif_new_hook           0x0064D35E
+#define mountpfs__sceSblPfsSetKeys_hook1                            0x0068D509
+#define mountpfs__sceSblPfsSetKeys_hook2                            0x0068D73A
 
-//SceShellUI patches - debug patches
-#define sceSblRcMgrIsAllowDebugMenuForSettings_patch                0x0001D100
-#define sceSblRcMgrIsStoreMode_patch                                0x0001D460
+// SceShellUI patches - debug patches
+#define sceSblRcMgrIsAllowDebugMenuForSettings_patch                0x0001D130
+#define sceSblRcMgrIsStoreMode_patch                                0x0001D490
 
-// SceShellUI patches - remote play patches                                
-#define CreateUserForIDU_patch                                      0x0018B110
-#define remote_play_menu_patch                                      0x00ECAB92
+// SceShellUI patches - remote play patches
+//#define CreateUserForIDU_patch                                      0x0
+//#define remote_play_menu_patch                                      0x0
 
 // SceRemotePlay patches - remote play patches
-// #define SceRemotePlay_patch1                                        0x0
-// #define SceRemotePlay_patch2                                        0x0
+//#define SceRemotePlay_patch1                                        0x0
+//#define SceRemotePlay_patch2                                        0x0
 
 // call sceVshAvcapSetInfo
-#define sceVshAvcapSetInfo_patch1       0x00218DE6
-#define sceVshAvcapSetInfo_patch2       0x00218E25
-#define sceVshAvcapSetInfo_patch3       0x00218E55
-#define sceVshAvcapSetInfo_patch4       0x00218EF3
-#define sceVshAvcapSetInfo_patch5       0x00218F2B
-#define sceVshAvcapSetInfo_patch6       0x00218F9C
+//#define sceVshAvcapSetInfo_patch1       0x0
+//#define sceVshAvcapSetInfo_patch2       0x0
+//#define sceVshAvcapSetInfo_patch3       0x0
+//#define sceVshAvcapSetInfo_patch4       0x0
+//#define sceVshAvcapSetInfo_patch5       0x0
+//#define sceVshAvcapSetInfo_patch6       0x0
 
 // SceShellCore patches
 // call sceKernelIsGenuineCEX
-#define sceKernelIsGenuineCEX_patch1    0x0016B664
-#define sceKernelIsGenuineCEX_patch2    0x0086BD24
-#define sceKernelIsGenuineCEX_patch3    0x008BC022
-#define sceKernelIsGenuineCEX_patch4    0x00A1D6C4
+#define sceKernelIsGenuineCEX_patch1    0x00168D20
+#define sceKernelIsGenuineCEX_patch2    0x0084D080
+#define sceKernelIsGenuineCEX_patch3    0x0089C1E2
+#define sceKernelIsGenuineCEX_patch4    0x00A236A0
 
 // call nidf_libSceDipsw
-#define nidf_libSceDipsw_patch1         0x0016B692
-#define nidf_libSceDipsw_patch2         0x00249E0C
-#define nidf_libSceDipsw_patch3         0x0086BD52
-#define nidf_libSceDipsw_patch4         0x00A1D6F2
+#define nidf_libSceDipsw_patch1         0x00168D4A
+#define nidf_libSceDipsw_patch2         0x00242978
+#define nidf_libSceDipsw_patch3         0x0084D0AA
+#define nidf_libSceDipsw_patch4         0x00A236CA
 
 // enable data mount
-#define enable_data_mount_patch         0x0031F070
+#define enable_data_mount_patch         0x0031C503
 
 // enable fpkg
-#define enable_fpkg_patch               0x003D7C9F
+#define enable_fpkg_patch               0x003D1A2F
  
 // debug pkg free string
-#define fake_free_patch                 0x00FC8439
+#define fake_free_patch                 0x00FC62B1
 
 // make pkgs installer working with external hdd
-#define pkg_installer_patch             0x00A06C11
+#define pkg_installer_patch             0x00A0C681
 
-// enable support with 11.00 external hdd
-#define ext_hdd_patch                   0x0060E17D
+// enable support with 6.xx external hdd
+#define ext_hdd_patch                   0x0060761D
 
 // enable debug trophies on retail
-// #define debug_trophies_patch            0x0
+#define debug_trophies_patch            0x0072D669
 
 // disable screenshot block
-// #define disable_screenshot_patch        0x0
+//#define disable_screenshot_patch        0x0
 
 #endif
