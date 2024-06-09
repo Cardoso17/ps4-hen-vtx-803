@@ -6,7 +6,7 @@
 // data
 #define XFAST_SYSCALL_addr               0x0000001C
 #define M_TEMP_addr                      0x01A4ECB0
-#define MINI_SYSCORE_SELF_BINARY_addr    0x00000000
+#define MINI_SYSCORE_SELF_BINARY_addr    0x00D42930
 #define ALLPROC_addr                     0x0221D2A0
 #define SBL_DRIVER_MAPPED_PAGES_addr     0x0263A6D0
 #define SBL_PFS_SX_addr                  0x02658650
