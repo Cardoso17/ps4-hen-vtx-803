@@ -1,8 +1,9 @@
 #ifndef __OFFSETS_H__
 #define __OFFSETS_H__
 #pragma once
-// 11.00
 
+// 11.00
+// data
 #define XFAST_SYSCALL_addr               0x000001C0
 #define M_TEMP_addr                      0x015415B0
 #define MINI_SYSCORE_SELF_BINARY_addr    0x0155CC48
@@ -40,7 +41,7 @@
 #define sceSblAuthMgrVerifyHeader_addr   0x00642FF0
 
 // Fpkg
-#define RsaesPkcs1v15Dec2048CRT_addr     0x003C8060
+#define RsaesPkcs1v15Dec2048CRT_addr     0x00133A10
 #define Sha256Hmac_addr                  0x002D1CA0
 #define AesCbcCfb128Encrypt_addr         0x002DEAA0
 #define AesCbcCfb128Decrypt_addr         0x002DECD0
@@ -90,19 +91,19 @@
 // #define SceRemotePlay_patch2                                        0x0
 
 // call sceVshAvcapSetInfo
-#define sceVshAvcapSetInfo_patch1       0x00218DE6
-#define sceVshAvcapSetInfo_patch2       0x00218E25
-#define sceVshAvcapSetInfo_patch3       0x00218E55
-#define sceVshAvcapSetInfo_patch4       0x00218EF3
-#define sceVshAvcapSetInfo_patch5       0x00218F2B
-#define sceVshAvcapSetInfo_patch6       0x00218F9C
+//#define sceVshAvcapSetInfo_patch1       0x00218DE6
+//#define sceVshAvcapSetInfo_patch2       0x00218E25
+//#define sceVshAvcapSetInfo_patch3       0x00218E55
+//#define sceVshAvcapSetInfo_patch4       0x00218EF3
+//#define sceVshAvcapSetInfo_patch5       0x00218F2B
+//#define sceVshAvcapSetInfo_patch6       0x00218F9C
 
 // SceShellCore patches
 // call sceKernelIsGenuineCEX
-#define sceKernelIsGenuineCEX_patch1    0x0016B664
-#define sceKernelIsGenuineCEX_patch2    0x0086BD24
-#define sceKernelIsGenuineCEX_patch3    0x008BC022
-#define sceKernelIsGenuineCEX_patch4    0x00A1D6C4
+#define sceKernelIsGenuineCEX_patch1      0x0016B664
+#define sceKernelIsGenuineCEX_patch2      0x0086BD24
+#define sceKernelIsGenuineCEX_patch3      0x008BC022
+#define sceKernelIsGenuineCEX_patch4      0x00A1D6C4
 
 // call nidf_libSceDipsw
 #define nidf_libSceDipsw_patch1         0x0016B692
