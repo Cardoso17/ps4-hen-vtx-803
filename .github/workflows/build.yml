@@ -22,8 +22,8 @@ jobs:
         ./clean.sh
         ./build.sh
 
-    - name: release for branch 950
-      if: github.event_name == 'push' && github.ref == 'refs/heads/950'
+    - name: release for branch 950-960
+      if: github.event_name == 'push' && github.ref == 'refs/heads/950-960'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create 950-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-950-vtx.bin --target ${{ GITHUB.SHA }} -t 950-1.0${{ GITHUB.RUN_NUMBER }}
+      run: gh release create 950-960-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-950-960-vtx.bin --target ${{ GITHUB.SHA }} -t 950-960-1.0${{ GITHUB.RUN_NUMBER }}
