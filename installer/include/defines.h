@@ -9,7 +9,7 @@
 #define LOG_IP   "192.168.1.3\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 #define LOG_PORT 9023
 
-#define FAKE_FW_VERSION 0x20000000
+#define FAKE_FW_VERSION 0x11500000
 
 struct payload_info {
 	uint8_t* buffer;
