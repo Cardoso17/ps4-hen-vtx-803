@@ -21,7 +21,7 @@
 #define debug_menu_error_patch2         0x004EA06F
 
 // allow sys_dynlib_dlsym in all processes
-#define sys_dynlib_dlsym_patch1         0x0023B67F
+#define sys_dynlib_dlsym_patch1         0x0019FEDF
 #define sys_dynlib_dlsym_patch2         0x00011960
 
 // disable signature check

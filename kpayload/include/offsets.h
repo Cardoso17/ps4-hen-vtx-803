@@ -4,7 +4,7 @@
 
 // 9.50
 // data
-#define XFAST_SYSCALL_addr               0x0000001C
+#define XFAST_SYSCALL_addr               0x000001C0
 #define M_TEMP_addr                      0x01A4ECB0
 #define MINI_SYSCORE_SELF_BINARY_addr    0x00D42930
 #define ALLPROC_addr                     0x0221D2A0
