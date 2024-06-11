@@ -9,11 +9,14 @@
 #define PRISON0_addr                    0x0111A7D0
 #define ROOTVNODE_addr                  0x01B8C730
 #define PMAP_STORE_addr                 0x02245C40
-#define DT_HASH_SEGMENT_addr            0x0
+#define DT_HASH_SEGMENT_addr            0x00CE68A8
+#define M_TEMP_addr                     0x01A77E10
 
 // Functions
 #define pmap_protect_addr               0x00383600
 #define pmap_protect_p_addr             0x00383647
+#define malloc_addr                     0x0046F7F0
+#define printf_addr                     0x00430AE0
 
 // Patches
 // debug menu error

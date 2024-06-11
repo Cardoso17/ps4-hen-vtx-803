@@ -92,34 +92,34 @@
 
 // SceShellCore patches
 // call sceKernelIsGenuineCEX
-#define sceKernelIsGenuineCEX_patch1    0x00169324
-#define sceKernelIsGenuineCEX_patch2    0x0084d474
-#define sceKernelIsGenuineCEX_patch3    0x008b9c12
-#define sceKernelIsGenuineCEX_patch4    0x00a238d4
+#define sceKernelIsGenuineCEX_patch1    0x00168D20
+#define sceKernelIsGenuineCEX_patch2    0x0084D080
+#define sceKernelIsGenuineCEX_patch3    0x0089C1E2
+#define sceKernelIsGenuineCEX_patch4    0x00A236A0
 
 // call nidf_libSceDipsw
-#define nidf_libSceDipsw_patch1         0x00169352
-#define nidf_libSceDipsw_patch2         0x0024293b
-#define nidf_libSceDipsw_patch3         0x0084d4a2
-#define nidf_libSceDipsw_patch4         0x00a23902
+#define nidf_libSceDipsw_patch1         0x00168D4A
+#define nidf_libSceDipsw_patch2         0x00242978
+#define nidf_libSceDipsw_patch3         0x0084D0AA
+#define nidf_libSceDipsw_patch4         0x00A236CA
 
 // enable data mount
-#define enable_data_mount_patch         0x0031C2C0
+#define enable_data_mount_patch         0x0031C503
 
 // enable fpkg
-#define enable_fpkg_patch               0x003D1A0F
+#define enable_fpkg_patch               0x003D1A2F
 
 // debug pkg free string
-#define fake_free_patch                 0x00FC6431
+#define fake_free_patch                 0x00FC62B1
 
 // make pkgs installer working with external hdd
-#define pkg_installer_patch             0x00A0C7A0 // Please double-check this value
+#define pkg_installer_patch             0x00A0C681
 
 // enable support with 6.xx external hdd
-#define ext_hdd_patch                   0x0060765D
+#define ext_hdd_patch                   0x0060761D
 
 // enable debug trophies on retail
-#define debug_trophies_patch            0x0072D5B9
+#define debug_trophies_patch            0x0072D669
 
 // disable screenshot block
 //#define disable_screenshot_patch        0x0
