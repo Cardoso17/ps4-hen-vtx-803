@@ -22,8 +22,8 @@ jobs:
         ./clean.sh
         ./build.sh
 
-    - name: release for branch 1050-1071
-      if: github.event_name == 'push' && github.ref == 'refs/heads/1050-1071'
+    - name: release for branch 1000-1001
+      if: github.event_name == 'push' && github.ref == 'refs/heads/1000-1001'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create 1050-1071-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-1050-1071-vtx.bin --target ${{ GITHUB.SHA }} -t 1050-1071-1.0${{ GITHUB.RUN_NUMBER }}
+      run: gh release create 1000-1001-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-1000-1001-vtx.bin --target ${{ GITHUB.SHA }} -t 1000-1001-1.0${{ GITHUB.RUN_NUMBER }}
