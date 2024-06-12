@@ -22,8 +22,8 @@ jobs:
         ./clean.sh
         ./build.sh
 
-    - name: release for branch 850-852
-      if: github.event_name == 'push' && github.ref == 'refs/heads/850-852'
+    - name: release for branch 850-852-PPPwn
+      if: github.event_name == 'push' && github.ref == 'refs/heads/850-852-PPPwn'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create 850-852-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-850-852-vtx.bin --target ${{ GITHUB.SHA }} -t 850-852-1.0${{ GITHUB.RUN_NUMBER }}
+      run: gh release create 850-852-PPPwn-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-850-852-PPPwn-vtx.bin --target ${{ GITHUB.SHA }} -t 850-852-PPPwn-1.0${{ GITHUB.RUN_NUMBER }}
