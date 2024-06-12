@@ -4,7 +4,7 @@ CC	:= gcc
 OBJCOPY	:= objcopy
 ODIR	:= build
 SDIR	:= source
-IDIRS	:= -I$(LIBPS4)/include -Iinclude
+IDIRS	:= -I$(LIBPS4)/include -Iinclude -I/opt/ps4-hen-vtx/PS4SDK/libPS4/include
 MAPFILE := $(shell basename $(CURDIR)).map
 CFLAGS	:= $(IDIRS) -Os -std=gnu11 -ffunction-sections -fdata-sections -fno-builtin -nostartfiles -nostdlib -Wall -masm=intel -march=btver2 -mtune=btver2 -m64 -mabi=sysv -mcmodel=small -fpie
 LFLAGS	:= -Xlinker -T $(LIBPS4)/linker.x -Xlinker -Map=$(MAPFILE) -Wl,--build-id=none -Wl,--gc-sections
