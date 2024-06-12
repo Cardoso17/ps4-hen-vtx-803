@@ -22,8 +22,8 @@ jobs:
         ./clean.sh
         ./build.sh
 
-    - name: release for branch 800-803
-      if: github.event_name == 'push' && github.ref == 'refs/heads/800-803'
+    - name: release for branch 800-803-PPPwn
+      if: github.event_name == 'push' && github.ref == 'refs/heads/800-803-PPPwn'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create 800-803-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-800-803-vtx.bin --target ${{ GITHUB.SHA }} -t 800-803-1.0${{ GITHUB.RUN_NUMBER }}
+      run: gh release create 800-803-PPPwn-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-800-803-PPPwn-vtx.bin --target ${{ GITHUB.SHA }} -t 800-803-PPPwn-1.0${{ GITHUB.RUN_NUMBER }}
