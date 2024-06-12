@@ -10,5 +10,5 @@ pushd installer
 make
 popd
 
-rm -f ps4-hen-950-960-vtx.bin
-cp installer/installer.bin ps4-hen-950-960-vtx.bin
+rm -f ps4-hen-950-960-PPPwn-vtx.bin
+cp installer/installer.bin ps4-hen-950-960-PPPwn-vtx.bin
