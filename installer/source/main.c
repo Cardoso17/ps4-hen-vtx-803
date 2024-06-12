@@ -115,12 +115,16 @@ int _main(struct thread *td)
 	initNetwork();
 	initDebugSocket();
 #endif
-
+	notify("DEBUG0");
 	printfsocket("Starting...\n");
+
+	notify("DEBUG1");
 
 	struct payload_info payload_info;
 	payload_info.buffer = (uint8_t *)kpayload;
 	payload_info.size = (size_t)kpayload_size;
+
+	notify("DEBUG2");
 
 	errno = 0;
 
@@ -128,7 +132,11 @@ int _main(struct thread *td)
 	result = !result ? 0 : errno;
 	printfsocket("install_payload: %d\n", result);
 
+	notify("DEBUG3");
+
 	patch_update();
+
+	notify("DEBUG4");
 
 	initSysUtil();
 	notify("Welcome to PS4HEN v"VERSION);
