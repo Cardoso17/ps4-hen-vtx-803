@@ -22,8 +22,8 @@ jobs:
         ./clean.sh
         ./build.sh
 
-    - name: release for branch 903-904
-      if: github.event_name == 'push' && github.ref == 'refs/heads/903-904'
+    - name: release for branch 903-904-PPPwn
+      if: github.event_name == 'push' && github.ref == 'refs/heads/903-904-PPPwn'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release create 903-904-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-903-904-vtx.bin --target ${{ GITHUB.SHA }} -t 903-904-1.0${{ GITHUB.RUN_NUMBER }}
+      run: gh release create 903-904-PPPwn-1.0${{ GITHUB.RUN_NUMBER }} ps4-hen-903-904-PPPwn-vtx.bin --target ${{ GITHUB.SHA }} -t 903-904-PPPwn-1.0${{ GITHUB.RUN_NUMBER }}
