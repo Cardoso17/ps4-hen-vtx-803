@@ -6,7 +6,7 @@
 // data
 #define XFAST_SYSCALL_addr              0x000001C0
 #define M_TEMP_addr                     0x01532C00
-#define MINI_SYSCORE_SELF_BINARY_addr   0xDEADBEEF
+#define MINI_SYSCORE_SELF_BINARY_addr   0x00D5EC48
 #define ALLPROC_addr                    0x022D9B40
 #define SBL_DRIVER_MAPPED_PAGES_addr    0x02646258
 #define SBL_PFS_SX_addr                 0x0267C088
@@ -41,7 +41,7 @@
 #define sceSblAuthMgrVerifyHeader_addr  0x00641650
 
 // Fpkg
-#define RsaesPkcs1v15Dec2048CRT_addr    0xDEADBEEF
+#define RsaesPkcs1v15Dec2048CRT_addr    0x0006CA20
 #define Sha256Hmac_addr                 0x0013A3D0
 #define AesCbcCfb128Encrypt_addr        0x003B9E00
 #define AesCbcCfb128Decrypt_addr        0x003BA030
