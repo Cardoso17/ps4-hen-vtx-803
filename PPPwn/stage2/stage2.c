@@ -145,7 +145,7 @@ struct sce_proc * proc_find_by_name(uint8_t * kbase,
   #undef USB_LOADER
 #endif*/
 
-#define ENABLE_DEBUG_MENU 0
+#define ENABLE_DEBUG_MENU 1
 #if ENABLE_DEBUG_MENU
   int shellui_patch(struct thread * td, uint8_t * kbase) {
     uint8_t * libkernel_sys_base = NULL,
@@ -450,27 +450,10 @@ void stage2(void)
   vm_map_unlock(map);
   if (r) {
     printf("failed to allocate payload memory!\n");
-    memcpy(&notify.message, "failed to allocate payload memory", 35);
-    //return r;
-  } else {
-    memcpy(&notify.message, "Allocated payload memory", 26);
+    return r;
   }
   printf("Allocated payload memory @ 0x%016lx\n", PAYLOAD_BASE);
   printf("Writing payload...\n");
-
-  fd = ksys_open(td, "/dev/notification0", O_WRONLY, 0);
-  if (!fd)
-    fd = ksys_open(td, "/dev/notification0", O_WRONLY | O_NONBLOCK, 0);
-  if (!fd)
-    fd = ksys_open(td, "/dev/notification1", O_WRONLY, 0);
-  if (!fd)
-    fd = ksys_open(td, "/dev/notification1", O_WRONLY | O_NONBLOCK, 0);
-
-  if (fd) {
-    ksys_write(td, fd, &notify, sizeof(notify));
-    ksys_close(td, fd);
-  }
-  return;
 
   #if !ENABLE_DEBUG_MENU
     memcpy(&notify.message, "PPPwned: Payload Injected successfully", 40);
