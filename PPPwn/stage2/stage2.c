@@ -383,6 +383,7 @@ void stage2(void)
   sys -> sy_narg = 2;
   sys -> sy_call = (void * ) sys_kexec;
   sys -> sy_thrcnt = 1;
+  printf("kexec added\n");
 
   // Restore write protection
   load_cr0(cr0);
@@ -408,12 +409,53 @@ void stage2(void)
   #endif
 
   // Send notification
-  OrbisNotificationRequest notify = {};
-  notify.targetId = -1;
-  notify.useIconImageUri = 1;
+   OrbisNotificationRequest notify = {};
+   notify.targetId = -1;
+   notify.useIconImageUri = 1;
+
+  printf("Finding SceShellCore process...\n");
+  struct sce_proc *p = proc_find_by_name(kbase, "SceShellCore");
+  if (!p) {
+    printf("Could not find SceShellCore process!\n");
+    memcpy(&notify.message, "SceShellCore process not found", 32);
+  } else {
+    memcpy(&notify.message, "Found SceShellCore process", 28);
+  }
+
+  fd = ksys_open(td, "/dev/notification0", O_WRONLY, 0);
+  if (!fd)
+    fd = ksys_open(td, "/dev/notification0", O_WRONLY | O_NONBLOCK, 0);
+  if (!fd)
+    fd = ksys_open(td, "/dev/notification1", O_WRONLY, 0);
+  if (!fd)
+    fd = ksys_open(td, "/dev/notification1", O_WRONLY | O_NONBLOCK, 0);
+
+  if (fd) {
+    ksys_write(td, fd, &notify, sizeof(notify));
+    ksys_close(td, fd);
+  }
+  return;
+
+  printf("Found SceShellCore process @ PID %d\n", p->pid);
+
+  vm = p->p_vmspace;
+  map = &vm->vm_map;
+
+  // allocate some memory.
+  vm_map_lock(map);
+  r = vm_map_insert(map, NULL, NULL, PAYLOAD_BASE, PAYLOAD_BASE + 0x400000, VM_PROT_ALL, VM_PROT_ALL, 0);
+  vm_map_unlock(map);
+  if (r) {
+    printf("failed to allocate payload memory!\n");
+    //return r;
+  }
+  printf("Allocated payload memory @ 0x%016lx\n", PAYLOAD_BASE);
+  printf("Writing payload...\n");
+
+
 
   #if !ENABLE_DEBUG_MENU
-    memcpy(&notify.message, "PPPwned: Payload Injected successfully TEST", 40);
+    memcpy(&notify.message, "PPPwned: Payload Injected successfully", 40);
   #else
     memcpy(&notify.message, "PPPwned: Debug Settings enabled", 33);
   #endif
