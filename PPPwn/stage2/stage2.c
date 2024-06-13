@@ -8,6 +8,7 @@
 // clang-format off
 #define _KERNEL
 #include <stddef.h>
+#include "proc_utils.h"
 #include <string.h>
 #include <sys/fcntl.h>
 #include <sys/types.h>
