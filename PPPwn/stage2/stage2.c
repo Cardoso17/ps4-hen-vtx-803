@@ -119,7 +119,212 @@ static int ksys_close(struct thread *td, int fd)
   return td->td_retval[0];
 }
 
+/**#define USB_LOADER 1
+#if FIRMWARE == 803 // Temporary dirty hack
+  #define ENABLE_DEBUG_MENU 1
+  #undef USB_LOADER
+#endif*/
+
 #define ENABLE_DEBUG_MENU 1
+#if ENABLE_DEBUG_MENU
+  int shellui_patch(struct thread * td, uint8_t * kbase) {
+    uint8_t * libkernel_sys_base = NULL,
+      * executable_base = NULL,
+      * app_base = NULL;
+
+    size_t n;
+    void * M_TEMP = (void * )(kbase + M_TEMP_offset);
+    uint64_t kaslr_offset = rdmsr(MSR_LSTAR) - kdlsym_addr_Xfast_syscall;
+    void( * free)(void * ptr, int type) = (void * )(kbase + free_offset);
+    int( * printf)(const char * format, ...) = (void * ) kdlsym(printf);
+
+    struct proc_vm_map_entry * entries = NULL;
+    size_t num_entries = 0;
+
+    int ret = 0;
+
+    uint32_t ofs_to_ret_1[] = {
+      sys_debug_menu,
+      sys_debug_menu_1,
+    };
+
+    uint8_t mov__eax_1__ret[6] = {
+      0xB8,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+      0xC3
+    };
+
+    struct sce_proc * ssui = proc_find_by_name(kbase, "SceShellUI");
+
+    if (!ssui) {
+      ret = -1;
+      goto error;
+    }
+    printf("ssui->pid: %d\n", ssui -> pid);
+
+    ret = proc_get_vm_map(td, kbase, ssui, & entries, & num_entries);
+    if (ret)
+      goto error;
+
+    for (int i = 0; i < num_entries; i++) {
+      if (!memcmp(entries[i].name, "executable", 10) && (entries[i].prot >= (PROT_READ | PROT_EXEC))) {
+        executable_base = (uint8_t * ) entries[i].start;
+        break;
+      }
+    }
+
+    if (!executable_base) {
+      ret = 1;
+      goto error;
+    }
+
+    for (int i = 0; i < num_entries; i++) {
+      if (!memcmp(entries[i].name, "app.exe.sprx", 12) && (entries[i].prot >= (PROT_READ | PROT_EXEC))) {
+        app_base = (uint8_t * ) entries[i].start;
+        break;
+      }
+    }
+
+    if (!app_base) {
+      ret = 1;
+      goto error;
+    }
+
+    // enable remote play menu - credits to Aida
+    for (int i = 0; i < num_entries; i++) {
+      if (!memcmp(entries[i].name, "libkernel_sys.sprx", 18) && (entries[i].prot >= (PROT_READ | PROT_EXEC))) {
+        libkernel_sys_base = (uint8_t * ) entries[i].start;
+        break;
+      }
+    }
+
+    if (!libkernel_sys_base) {
+      ret = -1;
+      goto error;
+    }
+
+    // enable debug settings menu
+    for (int i = 0; i < COUNT_OF(ofs_to_ret_1); i++) {
+      ret = proc_write_mem(td, kbase, ssui, (void * )(libkernel_sys_base + ofs_to_ret_1[i]), sizeof(mov__eax_1__ret), mov__eax_1__ret, & n);
+      if (ret)
+        goto error;
+    }
+
+    error:
+      if (entries)
+        free(entries, M_TEMP);
+
+    return ret;
+  }
+
+  int shellcore_fpkg_patch(struct thread * td, uint8_t * kbase) {
+    uint8_t * text_seg_base = NULL;
+    size_t n;
+
+    struct proc_vm_map_entry * entries = NULL;
+    size_t num_entries = 0;
+
+    int ret = 0;
+
+    uint32_t call_ofs_for__xor__eax_eax__3nop[] = {
+      // call sceKernelIsGenuineCEX
+      sceKernelIsGenuineCEX,
+      sceKernelIsGenuineCEX_1,
+      sceKernelIsGenuineCEX_2,
+      sceKernelIsGenuineCEX_3,
+      // call nidf_libSceDipsw
+      dipsw_libSceDipsw,
+      dipsw_libSceDipsw_1,
+      dipsw_libSceDipsw_2,
+      dipsw_libSceDipsw_3,
+    };
+
+    void * M_TEMP = (void * )(kbase + M_TEMP_offset);
+    void( * free)(void * ptr, int type) = (void * )(kbase + free_offset);
+    uint64_t kaslr_offset = rdmsr(MSR_LSTAR) - kdlsym_addr_Xfast_syscall;
+    int( * printf)(const char * format, ...) = (void * ) kdlsym(printf);
+
+    uint8_t xor__eax_eax__inc__eax[5] = {
+      0x31,
+      0xC0,
+      0xFF,
+      0xC0,
+      0x90
+    };
+
+    struct proc * ssc = proc_find_by_name(kbase, "SceShellCore");
+
+    if (!ssc) {
+      ret = -1;
+      goto error;
+    }
+
+    ret = proc_get_vm_map(td, kbase, ssc, & entries, & num_entries);
+    if (ret) {
+      goto error;
+    }
+
+    for (int i = 0; i < num_entries; i++) {
+      if (entries[i].prot == (PROT_READ | PROT_EXEC)) {
+        text_seg_base = (uint8_t * ) entries[i].start;
+        break;
+      }
+    }
+
+    if (!text_seg_base) {
+      ret = -1;
+      goto error;
+    }
+
+    // enable installing of debug packages
+    for (int i = 0; i < COUNT_OF(call_ofs_for__xor__eax_eax__3nop); i++) {
+      ret = proc_write_mem(td, kbase, ssc, (void * )(text_seg_base + call_ofs_for__xor__eax_eax__3nop[i]), 5, "\x31\xC0\x90\x90\x90", & n);
+      if (ret)
+        goto error;
+    }
+
+    ret = proc_write_mem(td, kbase, ssc, text_seg_base + enable_data_mount_patch, sizeof(xor__eax_eax__inc__eax), xor__eax_eax__inc__eax, & n);
+    if (ret)
+      goto error;
+
+    // enable fpkg for patches
+    ret = proc_write_mem(td, kbase, ssc, (void * )(text_seg_base + enable_fpkg_patch), 8, "\xE9\x96\x00\x00\x00\x90\x90\x90", & n);
+    if (ret)
+      goto error;
+
+    // this offset corresponds to "fake\0" string in the Shellcore's memory
+    ret = proc_write_mem(td, kbase, ssc, (void * )(text_seg_base + fake_free_patch), 5, "free\0", & n);
+    if (ret)
+      goto error;
+
+    // make pkgs installer working with external hdd
+    ret = proc_write_mem(td, kbase, ssc, (void * )(text_seg_base + pkg_installer_patch), 1, "\0", & n);
+    if (ret)
+      goto error;
+
+    // enable support with 6.xx external hdd
+    ret = proc_write_mem(td, kbase, ssc, (void * )(text_seg_base + ext_hdd_patch), 1, "\xEB", & n);
+    if (ret)
+      goto error;
+    #if FIRMWARE == 900 // FW 9.00
+    // enable debug trophies on retail
+    ret = proc_write_mem(td, kbase, ssc, (void * )(text_seg_base + debug_trophies_patch), 5, "\x31\xc0\x90\x90\x90", & n);
+    if (ret) {
+      goto error;
+    }
+    #endif
+
+    error:
+      if (entries)
+        free(entries, M_TEMP);
+
+    return ret;
+  }
+#endif
+
 
 void stage2(void)
 {
@@ -164,8 +369,30 @@ void stage2(void)
   *(uint8_t * )(kbase + kemem_1) = VM_PROT_ALL;
   *(uint8_t * )(kbase + kemem_2) = VM_PROT_ALL;
 
+
+
   // Restore write protection
   load_cr0(cr0);
+
+  int fd;
+  struct thread *td = curthread;
+
+  void( * vm_map_lock)(struct vm_map * map) = (void * )(kbase + vm_map_lock_offset);
+  struct vmspace * vm;
+  struct vm_map * map;
+  int r;
+  int( * vm_map_insert)(struct vm_map * map, struct vm_object * object,
+      vm_ooffset_t offset, vm_offset_t start, vm_offset_t end,
+      vm_prot_t prot, vm_prot_t max, int cow) =
+    (void * )(kbase + vm_map_insert_offset);
+  int( * vm_map_unlock)(struct vm_map * map) = (void * )(kbase + vm_map_unlock_offset);
+
+  #if ENABLE_DEBUG_MENU
+    printf("Enabling Debug Menu\n");
+    shellui_patch(td, kbase);
+    shellcore_fpkg_patch(td, kbase);
+    printf("Done.\n");
+  #endif
 
   // Send notification
   OrbisNotificationRequest notify = {};
@@ -177,10 +404,7 @@ void stage2(void)
   #else
     memcpy(&notify.message, "PPPwned: Debug Settings enabled", 33);
   #endif
-
-  struct thread *td = curthread;
-
-  int fd;
+  
   fd = ksys_open(td, "/dev/notification0", O_WRONLY, 0);
   if (!fd)
     fd = ksys_open(td, "/dev/notification0", O_WRONLY | O_NONBLOCK, 0);
