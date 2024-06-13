@@ -42,27 +42,31 @@
 
 struct sysent *sysents;
 
-size_t strlen(const char * s) {
-  const char * t = s;
-  while (* t)
+size_t strlen(const char *s)
+{
+  const char *t = s;
+  while (*t)
     t++;
   return t - s;
 }
 
+int memcmp(const void *str1,
+           const void *str2, size_t count)
+{
+  const unsigned char *s1 = (const unsigned char *)str1;
+  const unsigned char *s2 = (const unsigned char *)str2;
 
-int memcmp(const void * str1,
-  const void * str2, size_t count) {
-  const unsigned char * s1 = (const unsigned char * ) str1;
-  const unsigned char * s2 = (const unsigned char * ) str2;
-
-  while (count--> 0) {
-    if ( * s1++ != * s2++)
+  while (count-- > 0)
+  {
+    if (*s1++ != *s2++)
       return s1[-1] < s2[-1] ? -1 : 1;
   }
   return 0;
 }
 
-static int ksys_open(struct thread *td, const char *path, int flags, int mode) {
+static int ksys_open(struct thread *td,
+                     const char *path, int flags, int mode)
+{
   int (*sys_open)(struct thread *, struct open_args *) =
       (void *)sysents[SYS_open].sy_call;
 
@@ -73,13 +77,16 @@ static int ksys_open(struct thread *td, const char *path, int flags, int mode) {
   uap.flags = flags;
   uap.mode = mode;
   int error = sys_open(td, &uap);
-  if (error) return -error;
+  if (error)
+    return -error;
 
   return td->td_retval[0];
 }
 
-static int ksys_write(struct thread *td, int fd, const void *buf,
-                      size_t nbytes) {
+static int ksys_write(struct thread *td, int fd,
+                      const void *buf,
+                      size_t nbytes)
+{
   int (*sys_write)(struct thread *, struct write_args *) =
       (void *)sysents[SYS_write].sy_call;
 
@@ -90,12 +97,14 @@ static int ksys_write(struct thread *td, int fd, const void *buf,
   uap.buf = buf;
   uap.nbyte = nbytes;
   int error = sys_write(td, &uap);
-  if (error) return -error;
+  if (error)
+    return -error;
 
   return td->td_retval[0];
 }
 
-static int ksys_close(struct thread *td, int fd) {
+static int ksys_close(struct thread *td, int fd)
+{
   int (*sys_close)(struct thread *, struct close_args *) =
       (void *)sysents[SYS_close].sy_call;
 
@@ -104,17 +113,21 @@ static int ksys_close(struct thread *td, int fd) {
   struct close_args uap;
   uap.fd = fd;
   int error = sys_close(td, &uap);
-  if (error) return -error;
+  if (error)
+    return -error;
 
   return td->td_retval[0];
 }
 
-void stage2(void) {
+#define ENABLE_DEBUG_MENU 1
+
+void stage2(void)
+{
 
   // Use "kmem" for all patches
-	uint8_t *kmem;
+  uint8_t *kmem;
   uint64_t kaslr_offset = rdmsr(MSR_LSTAR) - kdlsym_addr_Xfast_syscall;
-  uint8_t * kbase = (uint8_t * )(rdmsr(0xC0000082) - 0x1C0);
+  uint8_t *kbase = (uint8_t *)(rdmsr(0xC0000082) - 0x1C0);
   int (*printf)(const char *format, ...) = (void *)kdlsym(printf);
 
   sysents = (struct sysent *)kdlsym(sysent);
@@ -151,17 +164,26 @@ void stage2(void) {
   OrbisNotificationRequest notify = {};
   notify.targetId = -1;
   notify.useIconImageUri = 1;
-  memcpy(&notify.message, "PPPwned", 8);
+
+  #if !ENABLE_DEBUG_MENU
+    memcpy(&notify.message, "PPPwned: Payload Injected successfully", 40);
+  #else
+    memcpy(&notify.message, "PPPwned: Debug Settings enabled", 33);
+  #endif
 
   struct thread *td = curthread;
 
   int fd;
   fd = ksys_open(td, "/dev/notification0", O_WRONLY, 0);
-  if (!fd) fd = ksys_open(td, "/dev/notification0", O_WRONLY | O_NONBLOCK, 0);
-  if (!fd) fd = ksys_open(td, "/dev/notification1", O_WRONLY, 0);
-  if (!fd) fd = ksys_open(td, "/dev/notification1", O_WRONLY | O_NONBLOCK, 0);
+  if (!fd)
+    fd = ksys_open(td, "/dev/notification0", O_WRONLY | O_NONBLOCK, 0);
+  if (!fd)
+    fd = ksys_open(td, "/dev/notification1", O_WRONLY, 0);
+  if (!fd)
+    fd = ksys_open(td, "/dev/notification1", O_WRONLY | O_NONBLOCK, 0);
 
-  if (fd) {
+  if (fd)
+  {
     ksys_write(td, fd, &notify, sizeof(notify));
     ksys_close(td, fd);
   }
