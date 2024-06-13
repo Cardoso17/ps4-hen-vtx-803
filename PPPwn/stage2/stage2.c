@@ -18,7 +18,6 @@
 #include <sys/proc.h>
 #include <machine/specialreg.h>
 #include "offsets.h"
-#include <ps4.h>
 // clang-format on
 
 // by OSM-Made
