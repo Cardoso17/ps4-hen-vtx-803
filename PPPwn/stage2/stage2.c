@@ -157,6 +157,13 @@ void stage2(void)
   memcpy((void *)kdlsym(copyinstr_patch2), nops, sizeof(nops));
   *(uint16_t *)kdlsym(copyinstr_patch3) = 0x9090;
 
+  // patch ASLR, thanks 2much4u
+  *(uint16_t * )(kbase + disable_aslr_p) = 0x9090;
+
+  // patch kmem_alloc
+  *(uint8_t * )(kbase + kemem_1) = VM_PROT_ALL;
+  *(uint8_t * )(kbase + kemem_2) = VM_PROT_ALL;
+
   // Restore write protection
   load_cr0(cr0);
 
