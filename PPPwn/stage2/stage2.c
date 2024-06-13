@@ -119,6 +119,26 @@ static int ksys_close(struct thread *td, int fd)
   return td->td_retval[0];
 }
 
+struct sce_proc * proc_find_by_name(uint8_t * kbase,
+  const char * name) {
+  struct sce_proc * p;
+
+  if (!name) {
+    return NULL;
+  }
+  //printf("after name\n");
+
+  p = * (struct proclist ** )(kbase + all_proc_offset);
+  do {
+    // printf("p->p_comm: %s\n", p->p_comm);
+    if (!memcmp(p -> p_comm, name, strlen(name))) {
+      return p;
+    }
+  } while ((p = p -> p_forw));
+
+  return NULL;
+}
+
 /**#define USB_LOADER 1
 #if FIRMWARE == 803 // Temporary dirty hack
   #define ENABLE_DEBUG_MENU 1
