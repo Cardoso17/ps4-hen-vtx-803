@@ -8,6 +8,7 @@
         "barrier.h": "c",
         "base64.h": "c",
         "camera.h": "c",
-        "offsets.h": "c"
+        "offsets.h": "c",
+        "stddef.h": "c"
     }
 }
