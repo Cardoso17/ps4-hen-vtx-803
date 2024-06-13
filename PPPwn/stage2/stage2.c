@@ -62,22 +62,6 @@ int memcmp(const void * str1,
   return 0;
 }
 
-static inline uint64_t rdmsr(u_int msr) {
-  uint32_t low, high;
-  asm volatile("rdmsr" : "=a"(low), "=d"(high) : "c"(msr));
-  return (low | ((uint64_t)high << 32));
-}
-
-static inline void load_cr0(u_long data) {
-  asm volatile("movq %0, %%cr0" ::"r"(data));
-}
-
-static inline u_long rcr0(void) {
-  u_long data;
-  asm volatile("movq %%cr0, %0" : "=r"(data));
-  return data;
-}
-
 static int ksys_open(struct thread *td, const char *path, int flags, int mode) {
   int (*sys_open)(struct thread *, struct open_args *) =
       (void *)sysents[SYS_open].sy_call;
