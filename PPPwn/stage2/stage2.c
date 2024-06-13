@@ -22,7 +22,7 @@
 // clang-format on
 
 // by OSM-Made
-typedef struct {
+/**typedef struct {
   int type;
   int reqId;
   int priority;
@@ -38,7 +38,7 @@ typedef struct {
   char message[1024];
   char iconUri[1024];
   char unk[1024];
-} OrbisNotificationRequest;
+} OrbisNotificationRequest;*/
 
 struct sysent *sysents;
 
