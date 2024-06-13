@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "*.embeddedhtml": "html",
-        "ps4.h": "c"
+        "ps4.h": "c",
+        "proc_utils.h": "c",
+        "libc.h": "c"
     }
 }
