@@ -125,7 +125,7 @@ static int ksys_close(struct thread *td, int fd)
   #undef USB_LOADER
 #endif*/
 
-#define ENABLE_DEBUG_MENU 1
+#define ENABLE_DEBUG_MENU 0
 #if ENABLE_DEBUG_MENU
   int shellui_patch(struct thread * td, uint8_t * kbase) {
     uint8_t * libkernel_sys_base = NULL,
@@ -325,6 +325,15 @@ static int ksys_close(struct thread *td, int fd)
   }
 #endif
 
+#define SYS_kexec 11
+struct sys_kexec_args {
+  int( * fptr)(void *,... );
+  void * arg;
+};
+
+static int sys_kexec(struct thread * td, struct sys_kexec_args * uap) {
+  return uap->arg ? uap->fptr(td, uap->arg) : uap->fptr(td);
+}
 
 void stage2(void)
 {
@@ -369,7 +378,11 @@ void stage2(void)
   *(uint8_t * )(kbase + kemem_1) = VM_PROT_ALL;
   *(uint8_t * )(kbase + kemem_2) = VM_PROT_ALL;
 
-
+  // Install kexec syscall 11
+  struct sysent * sys = & sysents[SYS_kexec];
+  sys -> sy_narg = 2;
+  sys -> sy_call = (void * ) sys_kexec;
+  sys -> sy_thrcnt = 1;
 
   // Restore write protection
   load_cr0(cr0);
@@ -400,7 +413,7 @@ void stage2(void)
   notify.useIconImageUri = 1;
 
   #if !ENABLE_DEBUG_MENU
-    memcpy(&notify.message, "PPPwned: Payload Injected successfully", 40);
+    memcpy(&notify.message, "PPPwned: Payload Injected successfully TEST", 40);
   #else
     memcpy(&notify.message, "PPPwned: Debug Settings enabled", 33);
   #endif
