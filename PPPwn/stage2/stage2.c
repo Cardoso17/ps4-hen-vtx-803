@@ -437,10 +437,26 @@ void stage2(void)
   struct sce_proc *p = proc_find_by_name(kbase, "SceShellCore");
   if (!p) {
     printf("Could not find SceShellCore process!\n");
-    memcpy(&notify.message, "SceShellCore process not found", 32);
-  } else {
-    memcpy(&notify.message, "Found SceShellCore process", 28);
+    return;
   }
+  printf("Found SceShellCore process @ PID %d\n", p->pid);
+
+  vm = p->p_vmspace;
+  map = &vm->vm_map;
+
+  // allocate some memory.
+  vm_map_lock(map);
+  r = vm_map_insert(map, NULL, NULL, PAYLOAD_BASE, PAYLOAD_BASE + 0x400000, VM_PROT_ALL, VM_PROT_ALL, 0);
+  vm_map_unlock(map);
+  if (r) {
+    printf("failed to allocate payload memory!\n");
+    memcpy(&notify.message, "failed to allocate payload memory", 35);
+    //return r;
+  } else {
+    memcpy(&notify.message, "Allocated payload memory", 26);
+  }
+  printf("Allocated payload memory @ 0x%016lx\n", PAYLOAD_BASE);
+  printf("Writing payload...\n");
 
   fd = ksys_open(td, "/dev/notification0", O_WRONLY, 0);
   if (!fd)
@@ -455,24 +471,6 @@ void stage2(void)
     ksys_close(td, fd);
   }
   return;
-
-  printf("Found SceShellCore process @ PID %d\n", p->pid);
-
-  vm = p->p_vmspace;
-  map = &vm->vm_map;
-
-  // allocate some memory.
-  vm_map_lock(map);
-  r = vm_map_insert(map, NULL, NULL, PAYLOAD_BASE, PAYLOAD_BASE + 0x400000, VM_PROT_ALL, VM_PROT_ALL, 0);
-  vm_map_unlock(map);
-  if (r) {
-    printf("failed to allocate payload memory!\n");
-    //return r;
-  }
-  printf("Allocated payload memory @ 0x%016lx\n", PAYLOAD_BASE);
-  printf("Writing payload...\n");
-
-
 
   #if !ENABLE_DEBUG_MENU
     memcpy(&notify.message, "PPPwned: Payload Injected successfully", 40);
