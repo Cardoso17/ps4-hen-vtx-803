@@ -1,13 +1,9 @@
-LIBPS4	:=	../../PS4SDK/libPS4
 
 TARGET = stage2
 OBJS = start.o stage2.o proc_utils.o  utils.o
 
 CC = gcc
 OBJCOPY = objcopy
-IDIRS	:= -I$(LIBPS4)/include -Iinclude
-MAPFILE := $(shell basename $(CURDIR)).map
-LFLAGS	:= -Xlinker -T $(LIBPS4)/linker.x -Xlinker -Map=$(MAPFILE) -Wl,--build-id=none -Wl,--gc-sections
 CFLAGS = -DSMP -isystem ../freebsd-headers/include -Wl,--build-id=none -Os -fno-stack-protector 
 LDFLAGS = -T linker.ld -nostartfiles -nostdlib
 
