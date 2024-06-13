@@ -1,4 +1,3 @@
-#include "libc.h"
 #include "proc_utils.h"
 #include "elf.h"
 #include "offsets.h"

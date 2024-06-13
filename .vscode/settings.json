@@ -3,6 +3,11 @@
         "*.embeddedhtml": "html",
         "ps4.h": "c",
         "proc_utils.h": "c",
-        "libc.h": "c"
+        "libc.h": "c",
+        "ksdk_bsd.h": "c",
+        "barrier.h": "c",
+        "base64.h": "c",
+        "camera.h": "c",
+        "offsets.h": "c"
     }
 }
