@@ -424,7 +424,7 @@ void stage2(void)
   #if ENABLE_DEBUG_MENU
     printf("Enabling Debug Menu\n");
     shellui_patch(td, kbase);
-    shellcore_fpkg_patch(td, kbase);
+    //shellcore_fpkg_patch(td, kbase);
     printf("Done.\n");
   #endif
 
